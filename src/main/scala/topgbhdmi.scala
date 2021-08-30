@@ -8,39 +8,72 @@ import gbvga.{Gb}
 
 class TopGbHdmi extends RawModule {
 
-  /************/
-  /** outputs */
-  /* Clock and reset */
-  val clock = IO(Input(Clock()))
-  val resetn = IO(Input(Bool()))
-  val pll_rstn = IO(Output(Bool()))
+      /************/
+      /** outputs */
+      /* Clock and reset */
+      val I_clk = IO(Input(Clock()))
+      val I_reset_n = IO(Input(Bool()))
 
-  /* game boy signals */
-  val gb = IO(Input(new Gb()))
+      /* Debug leds */
+      val O_led = IO(Output(UInt(2.W)))
 
-  /* TMDS (HDMI) signals */
+      /* game boy signals */
+      val gb = IO(Input(new Gb()))
 
-  withClockAndReset(clock, ~resetn) {
-    /* Activate pll at start*/
-    pll_rstn := true.B
-   
-    /* synchronize gameboy input signals with clock */
-    val shsync = ShiftRegister(gb.hsync,2)
-    val svsync = ShiftRegister(gb.vsync,2)
-    val sclk   = ShiftRegister(gb.clk  ,2)
-    val sdata  = ShiftRegister(gb.data ,2)
+      /* TMDS (HDMI) signals */
+      val O_tmds_clk_p  = IO(Output(Bool()))
+      val O_tmds_clk_n  = IO(Output(Bool()))
+      val O_tmds_data_p = IO(Output(UInt(3.W)))
+      val O_tmds_data_n = IO(Output(UInt(3.W)))
+    /********************************************/
 
-//    /* top GbVga module instantiation */
-//    val gb = Module(new GbVga())
-//    gbVga.io.gb.hsync := shsync
-//    gbVga.io.gb.vsync := svsync
-//    gbVga.io.gb.clk   := sclk
-//    gbVga.io.gb.data  := sdata
-//
-//    vga_hsync := gbVga.io.vga_hsync
-//    vga_vsync := gbVga.io.vga_vsync
-//    vga_color := gbVga.io.vga_color
-  }
+    val pll_lock =  Wire(Bool())
+      val serial_clk = Wire(Clock())
+    val pix_clk = Wire(Clock())
+
+    val glb_rst = ~(pll_lock & I_reset_n)
+
+    /* CLKDIV */
+    val clkDiv = Module(new CLKDIV())
+    clkDiv.io.RESETN := I_reset_n & pll_lock
+    clkDiv.io.HCLKIN := serial_clk
+    pix_clk := clkDiv.io.CLKOUT
+    clkDiv.io.CALIB := true.B
+
+    /* TMDS PLL */
+    val tmdsPllvr = Module(new TMDS_PLLVR())
+    tmdsPllvr.io.clkin := I_clk
+    serial_clk := tmdsPllvr.io.clkout
+    pll_lock := tmdsPllvr.io.lock
+
+      withClockAndReset(pix_clk, glb_rst) {
+
+            /* synchronize gameboy input signals with clock */
+            val shsync = ShiftRegister(gb.hsync,2)
+            val svsync = ShiftRegister(gb.vsync,2)
+            val sclk   = ShiftRegister(gb.clk  ,2)
+            val sdata  = ShiftRegister(gb.data ,2)
+
+//        /* top GbVga module instantiation */
+        val gbHdmi = Module(new GbHdmi())
+
+        gbHdmi.io.gb.hsync := shsync
+        gbHdmi.io.gb.vsync := svsync
+        gbHdmi.io.gb.clk   := sclk
+        gbHdmi.io.gb.data  := sdata
+
+        gbHdmi.io.serClk := serial_clk
+
+        O_tmds_clk_p  := gbHdmi.io.tmds.clk.p
+        O_tmds_clk_n  := gbHdmi.io.tmds.clk.n
+        for(i <- 0 to 2){
+            O_tmds_data_p(i) := gbHdmi.io.tmds.data(i).p
+            O_tmds_data_n(i) := gbHdmi.io.tmds.data(i).n
+        }
+      }
 }
 
-
+object TopGbHdmiDriver extends App {
+  (new ChiselStage).execute(args,
+    Seq(ChiselGeneratorAnnotation(() => new TopGbHdmi())))
+}

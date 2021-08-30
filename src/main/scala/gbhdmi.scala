@@ -25,9 +25,11 @@ class TMDS extends Bundle {
 
 trait GbHdmiConst { self: RawModule =>
     def vga2hdmiColors(c: VgaColors): HdmiColors = {
-        (new HdmiColors()).Lit(_.red -> c.red ## "h0".U(2.W),
-                               _.green -> c.green ## "h0".U(2.W),
-                               _.blue -> c.blue ## "h0".U(2.W))
+        val retColors = Wire(new HdmiColors())
+        retColors.red   := c.red ## "h0".U(2.W)
+        retColors.green := c.green ## "h0".U(2.W)
+        retColors.blue  := c.blue ## "h0".U(2.W)
+        retColors 
     } 
 }
 
@@ -78,7 +80,6 @@ class GbHdmi extends Module with GbConst with GbHdmiConst{
   }.otherwise {
     memhdmi.io.mem_data := last_read_value
   }
-
 }
 
 object GbHdmiDriver extends App {
