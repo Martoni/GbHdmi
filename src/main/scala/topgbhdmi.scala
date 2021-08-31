@@ -8,30 +8,31 @@ import gbvga.{Gb}
 
 class TopGbHdmi extends RawModule {
 
-      /************/
-      /** outputs */
-      /* Clock and reset */
-      val I_clk = IO(Input(Clock()))
-      val I_reset_n = IO(Input(Bool()))
+    /************/
+    /** outputs */
+    /* Clock and reset */
+    val I_clk = IO(Input(Clock()))
+    val I_reset_n = IO(Input(Bool()))
 
-      /* Debug leds */
-      val O_led = IO(Output(UInt(2.W)))
+    /* Debug leds */
+    val O_led = IO(Output(UInt(2.W)))
 
-      /* game boy signals */
-      val gb = IO(Input(new Gb()))
+    /* game boy signals */
+    val gb = IO(Input(new Gb()))
 
-      /* TMDS (HDMI) signals */
-      val O_tmds_clk_p  = IO(Output(Bool()))
-      val O_tmds_clk_n  = IO(Output(Bool()))
-      val O_tmds_data_p = IO(Output(UInt(3.W)))
-      val O_tmds_data_n = IO(Output(UInt(3.W)))
+    /* TMDS (HDMI) signals */
+    val O_tmds_clk_p  = IO(Output(Bool()))
+    val O_tmds_clk_n  = IO(Output(Bool()))
+    val O_tmds_data_p = IO(Output(UInt(3.W)))
+    val O_tmds_data_n = IO(Output(UInt(3.W)))
     /********************************************/
 
+    O_led := 2.U(2.W) 
+
     val pll_lock =  Wire(Bool())
-      val serial_clk = Wire(Clock())
+    val serial_clk = Wire(Clock())
     val pix_clk = Wire(Clock())
 
-    val glb_rst = ~(pll_lock & I_reset_n)
 
     /* CLKDIV */
     val clkDiv = Module(new CLKDIV())
@@ -46,31 +47,33 @@ class TopGbHdmi extends RawModule {
     serial_clk := tmdsPllvr.io.clkout
     pll_lock := tmdsPllvr.io.lock
 
-      withClockAndReset(pix_clk, glb_rst) {
+    val glb_rst = ~(pll_lock & I_reset_n)
 
-            /* synchronize gameboy input signals with clock */
-            val shsync = ShiftRegister(gb.hsync,2)
-            val svsync = ShiftRegister(gb.vsync,2)
-            val sclk   = ShiftRegister(gb.clk  ,2)
-            val sdata  = ShiftRegister(gb.data ,2)
+    withClockAndReset(pix_clk, glb_rst) {
 
-//        /* top GbVga module instantiation */
-        val gbHdmi = Module(new GbHdmi())
+      /* synchronize gameboy input signals with clock */
+      val shsync = ShiftRegister(gb.hsync,2)
+      val svsync = ShiftRegister(gb.vsync,2)
+      val sclk   = ShiftRegister(gb.clk  ,2)
+      val sdata  = ShiftRegister(gb.data ,2)
 
-        gbHdmi.io.gb.hsync := shsync
-        gbHdmi.io.gb.vsync := svsync
-        gbHdmi.io.gb.clk   := sclk
-        gbHdmi.io.gb.data  := sdata
+      /* top GbVga module instantiation */
+      val gbHdmi = Module(new GbHdmi())
 
-        gbHdmi.io.serClk := serial_clk
+      gbHdmi.io.gb.hsync := shsync
+      gbHdmi.io.gb.vsync := svsync
+      gbHdmi.io.gb.clk   := sclk
+      gbHdmi.io.gb.data  := sdata
 
-        O_tmds_clk_p  := gbHdmi.io.tmds.clk.p
-        O_tmds_clk_n  := gbHdmi.io.tmds.clk.n
-        for(i <- 0 to 2){
-            O_tmds_data_p(i) := gbHdmi.io.tmds.data(i).p
-            O_tmds_data_n(i) := gbHdmi.io.tmds.data(i).n
-        }
-      }
+      gbHdmi.io.serClk := serial_clk
+
+      O_tmds_clk_p  := gbHdmi.io.tmds.clk.p
+      O_tmds_clk_n  := gbHdmi.io.tmds.clk.n
+      O_tmds_data_p := 
+        gbHdmi.io.tmds.data(2).p ## gbHdmi.io.tmds.data(1).p ## gbHdmi.io.tmds.data(0).p
+      O_tmds_data_n :=
+        gbHdmi.io.tmds.data(2).n ## gbHdmi.io.tmds.data(1).n ## gbHdmi.io.tmds.data(0).n
+    }
 }
 
 object TopGbHdmiDriver extends App {

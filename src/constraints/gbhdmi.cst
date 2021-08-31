@@ -1,0 +1,24 @@
+//Copyright (C)2014-2020 Gowin Semiconductor Corporation.
+//All rights reserved. 
+//File Title: Physical Constraints file
+//GOWIN Version: 1.9.7.01Beta
+//Part Number: GW1NSR-LV4CQN48PC7/I6
+//Device: GW1NSR-4C
+//Created Time: Fri 06 11 14:54:37 2021
+
+IO_LOC "O_tmds_clk_p" 28,27;
+IO_PORT "O_tmds_clk_p" PULL_MODE=NONE DRIVE=3.5;
+IO_LOC "O_tmds_data_p[0]" 30,29;
+IO_PORT "O_tmds_data_p[0]" PULL_MODE=NONE DRIVE=3.5;
+IO_LOC "O_tmds_data_p[1]" 32,31;
+IO_PORT "O_tmds_data_p[1]" PULL_MODE=NONE DRIVE=3.5;
+IO_LOC "O_tmds_data_p[2]" 35,34;
+IO_PORT "O_tmds_data_p[2]" PULL_MODE=NONE DRIVE=3.5;
+
+//IO_LOC "O_led[0]" 10;
+//IO_PORT "O_led[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+
+IO_LOC "I_reset_n" 14;
+IO_PORT "I_reset_n" PULL_MODE=UP;
+IO_LOC "I_clk" 45;
+IO_PORT "I_clk" IO_TYPE=LVCMOS33 PULL_MODE=UP;

@@ -52,7 +52,7 @@ class GbHdmi extends Module with GbConst with GbHdmiConst{
 
   /* HDMI interface */
   val dvitxtop = Module(new DVI_TX_Top())
-  dvitxtop.io.I_rst_n := reset
+  dvitxtop.io.I_rst_n := RegNext(true.B, false.B)
   dvitxtop.io.I_serial_clk := io.serClk
   dvitxtop.io.I_rgb_clk := clock
   dvitxtop.io.I_rgb_vs := memhdmi.io.video_vsync
