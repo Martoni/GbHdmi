@@ -44,23 +44,23 @@ class GbHdmi extends Module with GbConst with GbHdmiConst{
   })
 
   /* GameBoy write */
-  val gbwrite = Module(new GbWrite(2, debug_simu=false, aformal=false))
-  gbwrite.io.gb := io.gb
+  val gbwt = Module(new GbWrite(2, debug_simu=false, aformal=false))
+  gbwt.io.gb := io.gb
 
   /* Mem Vga */
-  val memhdmi = Module(new MemHdmi())
+  val mhdmi = Module(new MemHdmi())
 
   /* HDMI interface */
   val dvitxtop = Module(new DVI_TX_Top())
   dvitxtop.io.I_rst_n := RegNext(true.B, false.B)
   dvitxtop.io.I_serial_clk := io.serClk
   dvitxtop.io.I_rgb_clk := clock
-  dvitxtop.io.I_rgb_vs := memhdmi.io.video_vsync
-  dvitxtop.io.I_rgb_hs := memhdmi.io.video_hsync
-  dvitxtop.io.I_rgb_de := memhdmi.io.video_de 
-  dvitxtop.io.I_rgb_r := memhdmi.io.video_color.red
-  dvitxtop.io.I_rgb_g := memhdmi.io.video_color.green
-  dvitxtop.io.I_rgb_b := memhdmi.io.video_color.blue
+  dvitxtop.io.I_rgb_vs := mhdmi.io.video_vsync
+  dvitxtop.io.I_rgb_hs := mhdmi.io.video_hsync
+  dvitxtop.io.I_rgb_de := mhdmi.io.video_de 
+  dvitxtop.io.I_rgb_r := mhdmi.io.video_color.red
+  dvitxtop.io.I_rgb_g := mhdmi.io.video_color.green
+  dvitxtop.io.I_rgb_b := mhdmi.io.video_color.blue
   io.tmds.clk.p := dvitxtop.io.O_tmds_clk_p  
   io.tmds.clk.n := dvitxtop.io.O_tmds_clk_n
   for(i <- 0 to 2) {
@@ -70,15 +70,15 @@ class GbHdmi extends Module with GbConst with GbHdmiConst{
 
   /* dual port ram connection */
   val mem = Mem(GBWIDTH*GBHEIGHT, UInt(2.W))
-  when(gbwrite.io.Mwrite) {
-    mem(gbwrite.io.Maddr) := gbwrite.io.Mdata
+  when(gbwt.io.Mwrite) {
+    mem(gbwt.io.Maddr) := gbwt.io.Mdata
   }
   val last_read_value = RegInit(0.U(2.W))
-  when(memhdmi.io.mem_read) {
-    memhdmi.io.mem_data := RegNext(mem(memhdmi.io.mem_addr))
-    last_read_value := memhdmi.io.mem_data
+  when(mhdmi.io.mem_read) {
+    mhdmi.io.mem_data := RegNext(mem(mhdmi.io.mem_addr))
+    last_read_value := mhdmi.io.mem_data
   }.otherwise {
-    memhdmi.io.mem_data := last_read_value
+    mhdmi.io.mem_data := last_read_value
   }
 }
 

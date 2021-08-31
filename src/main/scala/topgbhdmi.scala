@@ -27,16 +27,17 @@ class TopGbHdmi extends RawModule {
     val O_tmds_data_n = IO(Output(UInt(3.W)))
     /********************************************/
 
-    O_led := 2.U(2.W) 
+    O_led := 1.U(2.W) 
 
     val pll_lock =  Wire(Bool())
     val serial_clk = Wire(Clock())
     val pix_clk = Wire(Clock())
 
+    val glb_rst = ~(pll_lock & I_reset_n)
 
     /* CLKDIV */
     val clkDiv = Module(new CLKDIV())
-    clkDiv.io.RESETN := I_reset_n & pll_lock
+    clkDiv.io.RESETN := ~glb_rst
     clkDiv.io.HCLKIN := serial_clk
     pix_clk := clkDiv.io.CLKOUT
     clkDiv.io.CALIB := true.B
@@ -46,8 +47,6 @@ class TopGbHdmi extends RawModule {
     tmdsPllvr.io.clkin := I_clk
     serial_clk := tmdsPllvr.io.clkout
     pll_lock := tmdsPllvr.io.lock
-
-    val glb_rst = ~(pll_lock & I_reset_n)
 
     withClockAndReset(pix_clk, glb_rst) {
 
