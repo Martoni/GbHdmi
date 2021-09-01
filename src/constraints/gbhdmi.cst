@@ -15,8 +15,8 @@ IO_PORT "O_tmds_data_p[1]" PULL_MODE=NONE DRIVE=3.5;
 IO_LOC "O_tmds_data_p[2]" 35,34;
 IO_PORT "O_tmds_data_p[2]" PULL_MODE=NONE DRIVE=3.5;
 
-IO_LOC "O_led[0]" 10;
-IO_PORT "O_led[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+//IO_LOC "O_led[0]" 10;
+//IO_PORT "O_led[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
 
 IO_LOC "I_reset_n" 14;
 IO_PORT "I_reset_n" PULL_MODE=UP;
@@ -25,12 +25,12 @@ IO_PORT "I_clk" IO_TYPE=LVCMOS33 PULL_MODE=UP;
 
 // Gameboy pinout
 IO_PORT "gb_hsync" PULL_MODE=DOWN;
-IO_LOC "gb_hsync" 16;
+IO_LOC "gb_hsync" 43;
 IO_PORT "gb_vsync" PULL_MODE=DOWN;
-IO_LOC "gb_vsync" 2;
+IO_LOC "gb_vsync" 39;
 IO_PORT "gb_clk" PULL_MODE=DOWN;
-IO_LOC "gb_clk" 33;
+IO_LOC "gb_clk" 40;
 IO_PORT "gb_data[0]" PULL_MODE=DOWN;
-IO_LOC "gb_data[0]" 8;
+IO_LOC "gb_data[0]" 41;
 IO_PORT "gb_data[1]" PULL_MODE=DOWN;
-IO_LOC "gb_data[1]" 9;
+IO_LOC "gb_data[1]" 42;
