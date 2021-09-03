@@ -40,8 +40,9 @@ class GbHdmi extends Module with GbConst with GbHdmiConst{
     /* fast serial x5 clock */
     val serClk = Input(Clock())
     /* HDMI output signals */
-    val tmds = Output(new TMDS()) 
+    val tmds = Output(new TMDS())
   })
+
 
   /* GameBoy write */
   val gbwt = Module(new GbWrite(2, debug_simu=false, aformal=false))
@@ -67,6 +68,7 @@ class GbHdmi extends Module with GbConst with GbHdmiConst{
     io.tmds.data(i).p := dvitxtop.io.O_tmds_data_p(i)
     io.tmds.data(i).n := dvitxtop.io.O_tmds_data_n(i)
   }
+
 
   /* dual port ram connection */
   val mem = Mem(GBWIDTH*GBHEIGHT, UInt(2.W))

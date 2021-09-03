@@ -2,6 +2,7 @@ package gbhdmi
 
 import chisel3._
 import chisel3.util._
+import chisel3.util.log2Ceil
 import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
 
 import gbvga.{GbConst, HVSync, VideoParams}
@@ -25,11 +26,12 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
         H_SYNC = 40, H_BACK = 220,
         V_SYNC = 5,  V_BACK = 20,
         V_TOP = 5, V_DISPLAY = 720,
-        V_BOTTOM = 14)
+        V_BOTTOM = 20)
 
     val hv_sync = Module(new HVSync(vp)) // Synchronize VGA module
     io.video_hsync := hv_sync.io.hsync
     io.video_vsync := hv_sync.io.vsync
+    io.video_de    := hv_sync.io.display_on
 
     val xpos = (hv_sync.H_DISPLAY - GBWIDTH.U)/2.U
     val ypos = (hv_sync.V_DISPLAY - GBHEIGHT.U)/2.U
@@ -93,10 +95,8 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
 
     /* Vga colors */
     io.video_color := vga2hdmiColors(VGA_BLACK)
-    io.video_de := false.B
-    when(gb_display && (state===sPixInc)){
+    when(hv_sync.io.display_on){
       io.video_color := vga2hdmiColors(GbColors(io.mem_data))
-      io.video_de := true.B
     }
 
     /* Memory interface */

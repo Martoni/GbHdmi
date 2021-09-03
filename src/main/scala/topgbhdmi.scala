@@ -64,6 +64,11 @@ class TopGbHdmi extends RawModule {
       gbHdmi.io.gb.clk   := sclk
       gbHdmi.io.gb.data  := sdata
 
+      /* counter debug */
+      val max_count = 27000000
+      val (counterReg, counterPulse) = Counter(true.B, max_count)
+      O_led := (counterReg >= (max_count/2).U)
+
       gbHdmi.io.serClk := serial_clk
 
       O_tmds_clk_p  := gbHdmi.io.tmds.clk.p
