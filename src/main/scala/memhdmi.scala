@@ -33,8 +33,11 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
     io.video_vsync := hv_sync.io.vsync
     io.video_de    := hv_sync.io.display_on
 
-    val xpos = (hv_sync.H_DISPLAY - GBWIDTH.U)/2.U
-    val ypos = (hv_sync.V_DISPLAY - GBHEIGHT.U)/2.U
+    val wpix = 4
+    val hpix = 4
+
+    val xpos = (hv_sync.H_DISPLAY - (wpix*GBWIDTH).U)/2.U
+    val ypos = (hv_sync.V_DISPLAY - (hpix*GBHEIGHT).U)/2.U
 
     val gb_display = hv_sync.io.display_on & (hv_sync.io.vpos > ypos) & (hv_sync.io.hpos > xpos)
 
@@ -77,13 +80,21 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
     }
 
     /* pixel count */
+    val newgbline = ((hv_sync.io.hpos % hpix.U) === (hpix-1).U)
+    val newgbcol = ((hv_sync.io.vpos % wpix.U) === (wpix-1).U)
+
     when(gb_display){
-      when(state===sPixInc) {
+      when((state===sPixInc) && newgbline) {
         gbpix := gbpix + 1.U
         gbcols := gbcols + 1.U
       }
       when(state===sLineInc) {
-        gblines := gblines + 1.U
+        when(newgbcol){
+            gblines := gblines + 1.U
+            gbpix := gbpix + 1.U
+        }.otherwise {
+            gbpix := gbpix - GBWIDTH.U + 1.U
+        }
         gbcols := 0.U
       }
     }
@@ -95,7 +106,7 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
 
     /* Vga colors */
     io.video_color := vga2hdmiColors(VGA_BLACK)
-    when(hv_sync.io.display_on){
+    when(gb_display && (state =/= sWait)){
       io.video_color := vga2hdmiColors(GbColors(io.mem_data))
     }
 
