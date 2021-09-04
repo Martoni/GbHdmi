@@ -4,8 +4,12 @@ GbHdmi
 HDMI version of project [GbVga](https://github.com/Martoni/GbVga), aim to
 display GameBoy (DMG) on HDMI screen.
 
+![Mario in HDMI full screen](images/playing_mario_bros.png)
+
 This project aim to demonstrate the HDMI feature of Gowin FPGA on Tang Nano 4K
 and the power of Chisel HDL language for hardware generation.
+
+[Demonstraction in video](https://youtu.be/-JO6fnmHNhc).
 
 ## Bill of material
 
