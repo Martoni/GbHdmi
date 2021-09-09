@@ -9,7 +9,7 @@ display GameBoy (DMG) on HDMI screen.
 This project aim to demonstrate the HDMI feature of Gowin FPGA on Tang Nano 4K
 and the power of Chisel HDL language for hardware generation.
 
-[Demonstraction in video](https://youtu.be/-JO6fnmHNhc).
+[Demonstration in video](https://youtu.be/-JO6fnmHNhc).
 
 ## Bill of material
 
