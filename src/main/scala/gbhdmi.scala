@@ -32,8 +32,8 @@ trait GbHdmiConst { self: RawModule =>
         retColors.red   := c.red ## "h0".U(2.W)
         retColors.green := c.green ## "h0".U(2.W)
         retColors.blue  := c.blue ## "h0".U(2.W)
-        retColors 
-    } 
+        retColors
+    }
 }
 
 /* Use encrypted gowinDviTx by default */
@@ -66,12 +66,12 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module with GbConst with GbHdmi
     /* video signals connexions */
     dvitxtop.io.I_rgb_vs := mhdmi.io.video_vsync
     dvitxtop.io.I_rgb_hs := mhdmi.io.video_hsync
-    dvitxtop.io.I_rgb_de := mhdmi.io.video_de 
+    dvitxtop.io.I_rgb_de := mhdmi.io.video_de
     dvitxtop.io.I_rgb_r := mhdmi.io.video_color.red
     dvitxtop.io.I_rgb_g := mhdmi.io.video_color.green
     dvitxtop.io.I_rgb_b := mhdmi.io.video_color.blue
     /* tmds connexions */
-    io.tmds.clk.p := dvitxtop.io.O_tmds_clk_p  
+    io.tmds.clk.p := dvitxtop.io.O_tmds_clk_p
     io.tmds.clk.n := dvitxtop.io.O_tmds_clk_n
     for(i <- 0 to 2) {
       io.tmds.data(i).p := dvitxtop.io.O_tmds_data_p(i)
@@ -102,8 +102,8 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module with GbConst with GbHdmi
     serdesGreen.io.fclk := io.serClk
     val buffDiffGreen = Module(new TLVDS_OBUF())
     buffDiffGreen.io.I := serdesGreen.io.q
-    io.tmds.data(2).p := buffDiffGreen.io.O
-    io.tmds.data(2).n := buffDiffGreen.io.OB
+    io.tmds.data(1).p := buffDiffGreen.io.O
+    io.tmds.data(1).n := buffDiffGreen.io.OB
 
     // Red -> data 2
     val serdesRed = Module(new Oser10Module())
@@ -111,8 +111,8 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module with GbConst with GbHdmi
     serdesRed.io.fclk := io.serClk
     val buffDiffRed = Module(new TLVDS_OBUF())
     buffDiffRed.io.I := serdesRed.io.q
-    io.tmds.data(1).p := buffDiffRed.io.O
-    io.tmds.data(1).n := buffDiffRed.io.OB
+    io.tmds.data(2).p := buffDiffRed.io.O
+    io.tmds.data(2).n := buffDiffRed.io.OB
 
     // clock
     val serdesClk = Module(new Oser10Module())
