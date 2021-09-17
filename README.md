@@ -11,6 +11,49 @@ and the power of Chisel HDL language for hardware generation.
 
 [Demonstration in video](https://youtu.be/-JO6fnmHNhc).
 
+## Dependances
+
+To generate the core some additionnal Chisel library are required to be
+published locally :
+
+- [GbVga](https://github.com/Martoni/GbVga):
+
+```Shell
+$ git clone https://github.com/Martoni/GbVga.git
+$ cd GbVga
+$ sbt publishLocal
+```
+
+- [fpgamacro](https://github.com/Martoni/fpgamacro):
+
+```Shell
+$ git clone https://github.com/Martoni/fpgamacro
+$ cd fpgamacro
+$ sbt publishLocal
+```
+
+- [HdmiCore](https://github.com/Martoni/HdmiCore):
+
+```Shell
+$ git clone https://github.com/Martoni/HdmiCore
+$ cd HdmiCore
+$ sbt publishLocal
+```
+
+## Core generation
+
+To generate core with gowin DviTx encrypted ip do :
+
+```Shell
+$ sbt "runMain gbhdmi.TopGbHdmiDriver"
+```
+
+To use opensource HdmiCore :
+
+```Shell
+$ sbt "runMain gbhdmi.TopGbHdmiDriver noGowinDviTx"
+```
+
 ## Bill of material
 
 * [GameBoy DMG](https://en.wikipedia.org/wiki/Game_Boy)
