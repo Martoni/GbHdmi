@@ -54,6 +54,7 @@ To use opensource HdmiCore :
 $ sbt "runMain gbhdmi.TopGbHdmiDriver noGowinDviTx"
 ```
 
+Verilog BlackBoxed sources are available in directory `src/verilog` and pinout/constraints in `src/constraints`.
 ## Bill of material
 
 * [GameBoy DMG](https://en.wikipedia.org/wiki/Game_Boy)
