@@ -11,6 +11,8 @@ and the power of Chisel HDL language for hardware generation.
 
 [Demonstration in video](https://youtu.be/-JO6fnmHNhc).
 
+#GbHdmi was awarded at the [Digitronix Nepal competition](https://www.digitronixnepal.com/2021/10/winner-2nd-International-FPGA-design-competition.html).
+
 ## Dependances
 
 To generate the core some additionnal Chisel library are required to be
