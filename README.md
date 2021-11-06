@@ -22,7 +22,7 @@ published locally :
 
 ```Shell
 $ git clone https://github.com/Martoni/GbVga.git
-$ cd GbVga
+$ cd GbVga/chisel/
 $ sbt publishLocal
 ```
 
