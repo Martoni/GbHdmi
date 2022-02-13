@@ -23,7 +23,7 @@ IO_PORT "I_reset_n" PULL_MODE=UP;
 IO_LOC "I_clk" 45;
 IO_PORT "I_clk" IO_TYPE=LVCMOS33 PULL_MODE=UP;
 
-// Gameboy pinout
+// Gameboy video pinout
 IO_PORT "gb_hsync" PULL_MODE=DOWN;
 IO_LOC "gb_hsync" 43;
 IO_PORT "gb_vsync" PULL_MODE=DOWN;
@@ -34,3 +34,30 @@ IO_PORT "gb_data[0]" PULL_MODE=DOWN;
 IO_LOC "gb_data[0]" 41;
 IO_PORT "gb_data[1]" PULL_MODE=DOWN;
 IO_LOC "gb_data[1]" 42;
+
+// Gameboy pad pinout
+IO_PORT "gbpad_a"      PULL_MODE=DOWN;
+IO_PORT "gbpad_b"      PULL_MODE=DOWN;
+IO_PORT "gbpad_select" PULL_MODE=DOWN;
+IO_PORT "gbpad_start"  PULL_MODE=DOWN;
+IO_PORT "gbpad_right"  PULL_MODE=DOWN;
+IO_PORT "gbpad_left"   PULL_MODE=DOWN;
+IO_PORT "gbpad_up"     PULL_MODE=DOWN;
+IO_PORT "gbpad_down"   PULL_MODE=DOWN;
+
+IO_LOC "gbpad_a"      16;
+IO_LOC "gbpad_b"      13;
+IO_LOC "gbpad_select" 17;
+IO_LOC "gbpad_start"  18;
+IO_LOC "gbpad_right"  19;
+IO_LOC "gbpad_left"   20;
+IO_LOC "gbpad_up"     21;
+IO_LOC "gbpad_down"   22;
+
+// SNES keypad pinout
+IO_PORT "snes_dclock" PULL_MODE=DOWN;
+IO_PORT "snes_dlatch" PULL_MODE=DOWN;
+IO_PORT "snes_sdata" PULL_MODE=DOWN;
+IO_LOC "snes_dclock" 47;
+IO_LOC "snes_dlatch" 48;
+IO_LOC "snes_sdata" 1;

@@ -5,15 +5,21 @@ import chisel3.util._
 import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
 
 import gbvga.{Gb}
+import chisnespad.ChisNesPad
 import fpgamacro.gowin.{CLKDIV, TMDS_PLLVR}
 
 class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
 
-    /************/
-    /** outputs */
+    val clockFreq = 1000;
+    val mainClockFreq = 27000000;
+
+    /********************************************/
+    /**             inputs/outputs              */
+
     /* Clock and reset */
     val I_clk = IO(Input(Clock()))
     val I_reset_n = IO(Input(Bool()))
+
 
     /* Debug leds */
     val O_led = IO(Output(UInt(2.W)))
@@ -26,6 +32,21 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
     val O_tmds_clk_n  = IO(Output(Bool()))
     val O_tmds_data_p = IO(Output(UInt(3.W)))
     val O_tmds_data_n = IO(Output(UInt(3.W)))
+
+    /* snes pad io */
+    val snes_dclock = IO(Output(Bool()))
+    val snes_dlatch = IO(Output(Bool()))
+    val snes_sdata = IO(Input(Bool()))
+    
+    /* gb pad output */
+    val gbpad_a      = IO(Output(Bool()))
+    val gbpad_b      = IO(Output(Bool()))
+    val gbpad_select = IO(Output(Bool()))
+    val gbpad_start  = IO(Output(Bool()))
+    val gbpad_right  = IO(Output(Bool()))
+    val gbpad_left   = IO(Output(Bool()))
+    val gbpad_up     = IO(Output(Bool()))
+    val gbpad_down   = IO(Output(Bool()))
     /********************************************/
 
     O_led := 1.U(2.W) 
@@ -51,6 +72,32 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
 
     withClockAndReset(pix_clk, glb_rst) {
 
+      /* plug SuperNes pad */
+      val cnpd = Module(new ChisNesPad(mainClockFreq, clockFreq, 16))
+      val sNesPadReg = RegInit(0.U(16.W))
+      /* input shift reg ctrl */
+      snes_dclock := cnpd.io.dclock
+      snes_dlatch := cnpd.io.dlatch
+      cnpd.io.sdata := snes_sdata
+      /* output register */
+      cnpd.io.data.ready := true.B
+      when(cnpd.io.data.valid){
+        sNesPadReg := ~cnpd.io.data.bits
+      }
+      gbpad_b      := sNesPadReg(15)
+      //pad_y      := sNesPadReg(14)
+      gbpad_select := sNesPadReg(13)
+      gbpad_start  := sNesPadReg(12)
+      gbpad_up     := sNesPadReg(11)
+      gbpad_down   := sNesPadReg(10)
+      gbpad_left   := sNesPadReg(9)
+      gbpad_right  := sNesPadReg(8)
+      gbpad_a      := sNesPadReg(7)
+      //pad_x      := sNesPadReg(6)
+      //pad_l      := sNesPadReg(5)
+      //pad_r      := sNesPadReg(4)
+      O_led := sNesPadReg(15) ## sNesPadReg(15)
+
       /* synchronize gameboy input signals with clock */
       val shsync = ShiftRegister(gb.hsync,2)
       val svsync = ShiftRegister(gb.vsync,2)
@@ -66,9 +113,9 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
       gbHdmi.io.gb.data  := sdata
 
       /* counter debug */
-      val max_count = 27000000
-      val (counterReg, counterPulse) = Counter(true.B, max_count)
-      O_led := (counterReg >= (max_count/2).U)
+      //val max_count = 27000000
+      //val (counterReg, counterPulse) = Counter(true.B, max_count)
+      //O_led := (counterReg >= (max_count/2).U)
 
       gbHdmi.io.serClk := serial_clk
 
