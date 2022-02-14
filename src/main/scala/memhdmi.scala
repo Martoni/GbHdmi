@@ -107,7 +107,9 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
     /* Vga colors */
     io.video_color := vga2hdmiColors(VGA_BLACK)
     when(gb_display && (state =/= sWait)){
-      io.video_color := vga2hdmiColors(GbColors(io.mem_data))
+//      io.video_color := vga2hdmiColors(GbColors(io.mem_data))
+//      io.video_color := vga2hdmiColors(GbPocket(io.mem_data))
+      io.video_color := vga2hdmiColors(GbPink(io.mem_data))
     }
 
     /* Memory interface */

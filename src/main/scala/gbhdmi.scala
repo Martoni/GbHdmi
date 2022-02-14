@@ -37,7 +37,8 @@ trait GbHdmiConst { self: RawModule =>
 }
 
 /* Use encrypted gowinDviTx by default */
-class GbHdmi(gowinDviTx: Boolean = true) extends Module with GbConst with GbHdmiConst{
+class GbHdmi(gowinDviTx: Boolean = true) extends Module
+            with GbConst with GbHdmiConst{
   val io = IO(new Bundle {
     /* Game boy input signals */
     val gb = Input(new Gb())

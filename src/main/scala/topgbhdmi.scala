@@ -96,7 +96,7 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
       //pad_x      := sNesPadReg(6)
       //pad_l      := sNesPadReg(5)
       //pad_r      := sNesPadReg(4)
-      O_led := sNesPadReg(15) ## sNesPadReg(15)
+      O_led := sNesPadReg(11) ## sNesPadReg(10)
 
       /* synchronize gameboy input signals with clock */
       val shsync = ShiftRegister(gb.hsync,2)
@@ -111,11 +111,6 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
       gbHdmi.io.gb.vsync := svsync
       gbHdmi.io.gb.clk   := sclk
       gbHdmi.io.gb.data  := sdata
-
-      /* counter debug */
-      //val max_count = 27000000
-      //val (counterReg, counterPulse) = Counter(true.B, max_count)
-      //O_led := (counterReg >= (max_count/2).U)
 
       gbHdmi.io.serClk := serial_clk
 
