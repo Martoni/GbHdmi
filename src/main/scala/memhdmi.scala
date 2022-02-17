@@ -19,6 +19,7 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
         val video_vsync = Output(Bool())
         val video_color = Output(new HdmiColors())
         val video_de = Output(Bool())
+        val pattern_num = Input(UInt(2.W))
     })
 
     val vp = VideoParams(
@@ -105,11 +106,11 @@ class MemHdmi extends Module with GbConst with GbHdmiConst {
     }
 
     /* Vga colors */
+    val palettes = VecInit(Array(GbColors, GbPocket, GbPink, GbNimp))
+
     io.video_color := vga2hdmiColors(VGA_BLACK)
     when(gb_display && (state =/= sWait)){
-//      io.video_color := vga2hdmiColors(GbColors(io.mem_data))
-//      io.video_color := vga2hdmiColors(GbPocket(io.mem_data))
-      io.video_color := vga2hdmiColors(GbPink(io.mem_data))
+      io.video_color := vga2hdmiColors(palettes(io.pattern_num)(io.mem_data))
     }
 
     /* Memory interface */

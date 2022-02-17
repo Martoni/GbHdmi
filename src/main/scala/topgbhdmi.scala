@@ -107,6 +107,8 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
       /* top GbVga module instantiation */
       val gbHdmi = Module(new GbHdmi(gowinDviTx))
 
+      gbHdmi.io.pattern_trig := sNesPadReg(4) | sNesPadReg(5)
+
       gbHdmi.io.gb.hsync := shsync
       gbHdmi.io.gb.vsync := svsync
       gbHdmi.io.gb.clk   := sclk

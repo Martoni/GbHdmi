@@ -46,6 +46,8 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module
     val serClk = Input(Clock())
     /* HDMI output signals */
     val tmds = Output(new TMDSDiff())
+    /* Pattern trigger */
+    val pattern_trig = Input(Bool())
   })
 
   /* GameBoy write */
@@ -54,6 +56,13 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module
 
   /* Mem Vga */
   val mhdmi = Module(new MemHdmi())
+
+  /* pattern selection */
+  val patternNum = RegInit(0.U(2.W))
+  when(!RegNext(io.pattern_trig) & io.pattern_trig){
+    patternNum := patternNum + 1.U
+  }
+  mhdmi.io.pattern_num := patternNum
 
   /* HDMI interface */
   if(gowinDviTx){
