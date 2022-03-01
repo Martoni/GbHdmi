@@ -28,10 +28,7 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
     val gb = IO(Input(new Gb()))
 
     /* TMDS (HDMI) signals */
-    val O_tmds_clk_p  = IO(Output(Bool()))
-    val O_tmds_clk_n  = IO(Output(Bool()))
-    val O_tmds_data_p = IO(Output(UInt(3.W)))
-    val O_tmds_data_n = IO(Output(UInt(3.W)))
+    val O_tmds = IO(Output(new TMDSDiff()))
 
     /* snes pad io */
     val snes_dclock = IO(Output(Bool()))
@@ -116,12 +113,14 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
 
       gbHdmi.io.serClk := serial_clk
 
-      O_tmds_clk_p  := gbHdmi.io.tmds.clk.p
-      O_tmds_clk_n  := gbHdmi.io.tmds.clk.n
-      O_tmds_data_p := 
-        gbHdmi.io.tmds.data(2).p ## gbHdmi.io.tmds.data(1).p ## gbHdmi.io.tmds.data(0).p
-      O_tmds_data_n :=
-        gbHdmi.io.tmds.data(2).n ## gbHdmi.io.tmds.data(1).n ## gbHdmi.io.tmds.data(0).n
+      O_tmds.clk.p :=  gbHdmi.io.tmds.clk.p
+      O_tmds.clk.n  := gbHdmi.io.tmds.clk.n
+      O_tmds.data(0).p := gbHdmi.io.tmds.data(0).p
+      O_tmds.data(0).n := gbHdmi.io.tmds.data(0).n
+      O_tmds.data(1).p := gbHdmi.io.tmds.data(1).p
+      O_tmds.data(1).n := gbHdmi.io.tmds.data(1).n
+      O_tmds.data(2).p := gbHdmi.io.tmds.data(2).p
+      O_tmds.data(2).n := gbHdmi.io.tmds.data(2).n
     }
 }
 
