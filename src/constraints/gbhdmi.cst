@@ -8,12 +8,12 @@
 
 IO_LOC "O_tmds_clk_p" 28,27;
 IO_PORT "O_tmds_clk_p" PULL_MODE=NONE DRIVE=3.5;
-IO_LOC "O_tmds_data_p[0]" 30,29;
-IO_PORT "O_tmds_data_p[0]" PULL_MODE=NONE DRIVE=3.5;
-IO_LOC "O_tmds_data_p[1]" 32,31;
-IO_PORT "O_tmds_data_p[1]" PULL_MODE=NONE DRIVE=3.5;
-IO_LOC "O_tmds_data_p[2]" 35,34;
-IO_PORT "O_tmds_data_p[2]" PULL_MODE=NONE DRIVE=3.5;
+IO_LOC "O_tmds_data_0_p" 30,29;
+IO_PORT "O_tmds_data_0_p" PULL_MODE=NONE DRIVE=3.5;
+IO_LOC "O_tmds_data_1_p" 32,31;
+IO_PORT "O_tmds_data_1_p" PULL_MODE=NONE DRIVE=3.5;
+IO_LOC "O_tmds_data_2_p" 35,34;
+IO_PORT "O_tmds_data_2_p" PULL_MODE=NONE DRIVE=3.5;
 
 IO_LOC "O_led[0]" 10;
 IO_PORT "O_led[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;

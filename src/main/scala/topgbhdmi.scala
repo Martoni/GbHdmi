@@ -6,6 +6,7 @@ import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
 
 import gbvga.{Gb}
 import chisnespad.ChisNesPad
+import hdmicore.TMDSDiff
 import fpgamacro.gowin.{CLKDIV, TMDS_PLLVR}
 
 class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
@@ -19,7 +20,6 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
     /* Clock and reset */
     val I_clk = IO(Input(Clock()))
     val I_reset_n = IO(Input(Bool()))
-
 
     /* Debug leds */
     val O_led = IO(Output(UInt(2.W)))

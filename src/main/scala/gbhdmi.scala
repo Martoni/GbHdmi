@@ -7,6 +7,7 @@ import chisel3.experimental.BundleLiterals._
 
 import gbvga.{Gb, VgaColors, GbConst, GbWrite}
 import hdmicore.{Tmds, RGBColors, VideoHdmi}
+import hdmicore.{DiffPair, TMDSDiff}
 import hdmicore.{Rgb2Tmds}
 import fpgamacro.gowin.{Oser10Module, TLVDS_OBUF}
 
@@ -14,16 +15,6 @@ class HdmiColors extends Bundle {
   val red   = UInt(8.W)
   val green = UInt(8.W)
   val blue  = UInt(8.W)
-}
-
-class DiffPair extends Bundle {
-    val p = Bool()
-    val n = Bool()
-}
-
-class TMDSDiff extends Bundle {
-    val clk  = new DiffPair()
-    val data = Vec(3, new DiffPair())
 }
 
 trait GbHdmiConst { self: RawModule =>
@@ -97,14 +88,14 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module
     rgb2tmds.io.videoSig.pixel.blue  := mhdmi.io.video_color.blue
 
     /* serdes */
-    // Blue -> data 0
-    val serdesBlue = Module(new Oser10Module())
-    serdesBlue.io.data := rgb2tmds.io.tmds_blue
-    serdesBlue.io.fclk := io.serClk
-    val buffDiffBlue = Module(new TLVDS_OBUF())
-    buffDiffBlue.io.I := serdesBlue.io.q
-    io.tmds.data(0).p := buffDiffBlue.io.O
-    io.tmds.data(0).n := buffDiffBlue.io.OB
+    // Red -> data 2
+    val serdesRed = Module(new Oser10Module())
+    serdesRed.io.data := rgb2tmds.io.tmds_red
+    serdesRed.io.fclk := io.serClk
+    val buffDiffRed = Module(new TLVDS_OBUF())
+    buffDiffRed.io.I := serdesRed.io.q
+    io.tmds.data(2).p := buffDiffRed.io.O
+    io.tmds.data(2).n := buffDiffRed.io.OB
 
     // Green -> data 1
     val serdesGreen = Module(new Oser10Module())
@@ -115,14 +106,14 @@ class GbHdmi(gowinDviTx: Boolean = true) extends Module
     io.tmds.data(1).p := buffDiffGreen.io.O
     io.tmds.data(1).n := buffDiffGreen.io.OB
 
-    // Red -> data 2
-    val serdesRed = Module(new Oser10Module())
-    serdesRed.io.data := rgb2tmds.io.tmds_red
-    serdesRed.io.fclk := io.serClk
-    val buffDiffRed = Module(new TLVDS_OBUF())
-    buffDiffRed.io.I := serdesRed.io.q
-    io.tmds.data(2).p := buffDiffRed.io.O
-    io.tmds.data(2).n := buffDiffRed.io.OB
+    // Blue -> data 0
+    val serdesBlue = Module(new Oser10Module())
+    serdesBlue.io.data := rgb2tmds.io.tmds_blue
+    serdesBlue.io.fclk := io.serClk
+    val buffDiffBlue = Module(new TLVDS_OBUF())
+    buffDiffBlue.io.I := serdesBlue.io.q
+    io.tmds.data(0).p := buffDiffBlue.io.O
+    io.tmds.data(0).n := buffDiffBlue.io.OB
 
     // clock
     val serdesClk = Module(new Oser10Module())
