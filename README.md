@@ -48,19 +48,14 @@ $ sbt publishLocal
 
 ## Core generation
 
-To generate core with gowin DviTx encrypted ip do :
+To generate verilog using HdmiCore :
 
 ```Shell
-$ sbt "runMain gbhdmi.TopGbHdmiDriver"
-```
-
-To use opensource HdmiCore :
-
-```Shell
-$ sbt "runMain gbhdmi.TopGbHdmiDriver noGowinDviTx"
+$ sbt "runMain gbhdmi.TopGbHdmiDriver
 ```
 
 Verilog BlackBoxed sources are available in directory `src/verilog` and pinout/constraints in `src/constraints`.
+
 ## Bill of material
 
 * [GameBoy DMG](https://en.wikipedia.org/wiki/Game_Boy)
