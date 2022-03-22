@@ -6,7 +6,7 @@ import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
 
 import gbvga.{Gb}
 import chisnespad.ChisNesPad
-import hdmicore.TMDSDiff
+import hdmicore.{TMDSDiff, VideoHdmi, Tmds}
 import fpgamacro.gowin.{CLKDIV, TMDS_PLLVR}
 
 class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
@@ -102,7 +102,7 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
       val sdata  = ShiftRegister(gb.data ,2)
 
       /* top GbVga module instantiation */
-      val gbHdmi = Module(new GbHdmi(gowinDviTx))
+      val gbHdmi = Module(new GbHdmi())
 
       gbHdmi.io.pattern_trig := sNesPadReg(4) | sNesPadReg(5)
 
@@ -125,15 +125,7 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
 }
 
 object TopGbHdmiDriver extends App {
-  var gowinDviTx = true
-  for(arg <- args){
-    if(arg == "noGowinDviTx")
-      gowinDviTx = false 
-  }
-  if(gowinDviTx)
-    println("Generate GbHdmi with encrypted Gowin DviTx core")
-  else
-    println("Generate GbHdmi with open source HdmiCore core")
+  println("Generate GbHdmi with open source HdmiCore core")
   (new ChiselStage).execute(args,
-    Seq(ChiselGeneratorAnnotation(() => new TopGbHdmi(gowinDviTx))))
+    Seq(ChiselGeneratorAnnotation(() => new TopGbHdmi())))
 }
