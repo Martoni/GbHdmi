@@ -49,7 +49,7 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
     gbpad_right := true.B
     gbpad_left := true.B
 
-    O_led := 0.U(2.W)
+    //O_led := 0.U(2.W)
 
     val pll_lock =  Wire(Bool())
     val serial_clk = Wire(Clock())
@@ -82,7 +82,7 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
         /* output register */
         cnpd.io.data.ready := true.B
         when(cnpd.io.data.valid){
-            sNesPadReg := cnpd.io.data.bits
+            sNesPadReg := ~cnpd.io.data.bits
         }
 
         //gbpad_b      := sNesPadReg(15)
@@ -106,15 +106,15 @@ class TopGbHdmi(gowinDviTx: Boolean = true) extends RawModule {
         P12 := true.B
         P13 := true.B
         when(ShiftRegister(P14, 2) === false.B){
-            P10 := sNesPadReg(8) // right
-            P11 := sNesPadReg(9) // left
-            P12 := sNesPadReg(11)// up
-            P13 := sNesPadReg(10)// down
+            P10 := !sNesPadReg(8) // right
+            P11 := !sNesPadReg(9) // left
+            P12 := !sNesPadReg(11)// up
+            P13 := !sNesPadReg(10)// down
         }.elsewhen(ShiftRegister(P15, 2) === false.B){
-            P10 := sNesPadReg(7)  // a
-            P11 := sNesPadReg(15) // b
-            P12 := sNesPadReg(13) // select
-            P13 := sNesPadReg(12) // start
+            P10 := !sNesPadReg(7)  // a
+            P11 := !sNesPadReg(15) // b
+            P12 := !sNesPadReg(13) // select
+            P13 := !sNesPadReg(12) // start
         }
 
         /* synchronize gameboy input signals with clock */
