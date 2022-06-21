@@ -17,7 +17,7 @@ IO_PORT "O_tmds_data_2_p" PULL_MODE=NONE DRIVE=3.5;
 
 IO_LOC "O_led[0]" 10;
 IO_PORT "O_led[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
-IO_LOC "O_led[1]" 23;
+IO_LOC "O_led[1]" 44;
 
 IO_LOC "I_reset_n" 14;
 IO_PORT "I_reset_n" PULL_MODE=UP;
@@ -46,20 +46,20 @@ IO_PORT "gbpad_left"   PULL_MODE=DOWN;
 IO_PORT "P14" PULL_MODE=UP;
 IO_PORT "P15" PULL_MODE=UP;
 
-IO_LOC "P10" 16; //"gbpad_a"
-IO_LOC "P11" 13; //"gbpad_b"
-IO_LOC "P12" 17; //"gbpad_select"
-IO_LOC "P13" 18; //"gbpad_start"
-IO_LOC "gbpad_right" 19; //"gbpad_right"
-IO_LOC "gbpad_left"  20; //"gbpad_left"
-IO_LOC "P14" 21; //"gbpad_up"
-IO_LOC "P15" 22; //"gbpad_down"
+IO_LOC "P10" 18; //"gbpad_a"
+IO_LOC "P11" 19; //"gbpad_b"
+IO_LOC "P12" 20; //"gbpad_select"
+IO_LOC "P13" 21; //"gbpad_start"
+//IO_LOC "gbpad_right" 19; //"gbpad_right"
+//IO_LOC "gbpad_left"  20; //"gbpad_left"
+IO_LOC "P14" 22; //"gbpad_up"
+IO_LOC "P15" 23; //"gbpad_down"
 
 
 // SNES keypad pinout
 IO_PORT "snes_dclock" PULL_MODE=DOWN;
 IO_PORT "snes_dlatch" PULL_MODE=DOWN;
 IO_PORT "snes_sdata" PULL_MODE=DOWN;
-IO_LOC "snes_dclock" 47;
-IO_LOC "snes_dlatch" 48;
-IO_LOC "snes_sdata" 1;
+IO_LOC "snes_dclock" 17;
+IO_LOC "snes_dlatch" 13;
+IO_LOC "snes_sdata" 16;
