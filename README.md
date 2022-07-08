@@ -4,6 +4,7 @@ GbHdmi
 HDMI version of project [GbVga](https://github.com/Martoni/GbVga), aim to
 display GameBoy (DMG) on HDMI screen and play with Super NES Joypad.
 
+![gbswitch_final_version](images/gbhdmi_photo.jpg)
 
 ![Mario Land 2 with pocket colors](images/marioland2_pocket_color.jpg)
 
