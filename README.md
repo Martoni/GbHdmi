@@ -47,6 +47,13 @@ $ cd HdmiCore
 $ sbt publishLocal
 ```
 
+- [chisNesPad](https://github.com/Martoni/chisNesPad):
+```Shell
+$ git clone https://github.com/Martoni/chisNesPad
+$ cd chisNesPad
+$ sbt publishLocal
+```
+
 ## Core generation
 
 To generate verilog using HdmiCore :
