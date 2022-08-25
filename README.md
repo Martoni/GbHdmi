@@ -14,7 +14,7 @@ This project aim to demonstrate the HDMI feature of Gowin FPGA on Tang Nano 4K
 and the power of Chisel HDL language for hardware generation.
 
 * [Demonstration in video](https://youtu.be/-JO6fnmHNhc).
-* [Demonstration in video with Super Nes Joypad](https://www.youtube.com/watch?v=fpuqvUVp__I).
+* [Demonstration in video with Super Nes Joypad](https://video.ploud.fr/w/2aoF4HXFNLjLZoam88pt2n).
 
 #GbHdmi was awarded at the [Digitronix Nepal competition](https://www.digitronixnepal.com/2021/10/winner-2nd-International-FPGA-design-competition.html).
 
