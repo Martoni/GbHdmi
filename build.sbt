@@ -1,19 +1,25 @@
 // See README.md for license details.
 
-ThisBuild / scalaVersion     := "2.12.13"
-ThisBuild / version          := "0.1.0"
-ThisBuild / organization     := "eu.fabienm"
+scalaVersion     := "2.13.8"
+version          := "0.1.1"
+organization     := "eu.fabienm"
+
+val majorChiselVersion = "3"
+val minorChiselVersion = "5.6"
+
+val chiselVersion = majorChiselVersion + "." + minorChiselVersion
+
 
 lazy val root = (project in file("."))
   .settings(
     name := "GbHdmi",
     libraryDependencies ++= Seq(
-      "edu.berkeley.cs" %% "chisel3" % "3.5.1",
-      "edu.berkeley.cs" %% "chiseltest" % "0.5.1" % "test",
-      "eu.fabienm" %% "gbvga" % "0.1.0",
-      "com.armadeus" %% "hdmicore" % "0.1.0",
-      "eu.fabienm" %% "chisnespad" % "0.2.0",
-      "org.armadeus" %% "fpgamacro" % "0.1.0"
+      "edu.berkeley.cs" %% "chisel3" % chiselVersion,
+      "edu.berkeley.cs" %% "chiseltest" % ("0." + minorChiselVersion)  % "test",
+      "eu.fabienm" %% "gbvga" % "0.1.1",
+      "eu.fabienm" %% "hdmicore" % "0.1.1",
+      "Martoni" %% "chisnespad" % "0.2.1",
+      "Martoni" %% "fpgamacro" % "0.2.2"
     ),
     scalacOptions ++= Seq(
       "-Xsource:2.11",
@@ -21,10 +27,8 @@ lazy val root = (project in file("."))
       "-deprecation",
       "-feature",
       "-Xcheckinit",
-      // Enables autoclonetype2 in 3.4.x (on by default in 3.5)
       "-P:chiselplugin:useBundlePlugin"
     ),
-    addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.1" cross CrossVersion.full),
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+    addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % chiselVersion cross CrossVersion.full),
   )
 
